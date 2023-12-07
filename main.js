@@ -25,6 +25,20 @@ class Game {
                     }
                 }
             }
+            // Set the "hat" location
+            const hatLocation = {
+                x: Math.floor(Math.random() * columns),
+                y: Math.floor(Math.random() * rows)
+            };
+            // Make sure the "hat" is not at the starting point
+            while (hatLocation.x === 0 && hatLocation.y === 0) {
+                hatLocation.x = Math.floor(Math.random() * columns);
+                hatLocation.y = Math.floor(Math.random() * rows);
+            }
+            field[hatLocation.y][hatLocation.x] = hat;
+            // Set the starting point
+            field[0][0] = pathCharacter;
+            
             this.field = field;
         }
 
@@ -48,6 +62,7 @@ let rows;
 while (!validRows) {
     try {
         rows = prompt('How many rows would you like?');
+        console.log("\n");
         if (!isNaN(rows) && rows > 0 && rows <= 100) {
             validRows = true;
         }
@@ -64,7 +79,7 @@ let validColumns = false;
 let columns;
 while (!validColumns) {
     try {
-        columns = prompt('How many columns would you like?\n');
+        columns = prompt('How many columns would you like?');
         if (!isNaN(columns) && columns > 0 && columns <= 100) {
             validColumns = true;
         }
