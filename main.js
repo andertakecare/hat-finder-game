@@ -36,9 +36,10 @@ class Game {
                 hatLocation.y = Math.floor(Math.random() * rows);
             }
             field[hatLocation.y][hatLocation.x] = hat;
+
             // Set the starting point
             field[0][0] = pathCharacter;
-            
+
             this.field = field;
         }
 
@@ -46,6 +47,68 @@ class Game {
         for (let i = 0; i < this.field.length; i++) {
             console.log(this.field[i].join(''));
         }
+    }
+
+    play() {
+        let playing = true;
+        while (playing) {
+            this.print();
+            this.askQuestion();
+            if (!this.isInBounds()) {
+                console.log('Out of bounds instruction!');
+                playing = false;
+                break;
+            } else if (this.isHole()) {
+                console.log('Sorry, you fell down a hole!');
+                playing = false;
+                break;
+            } else if (this.isHat()) {
+                console.log('Congrats, you found your hat!');
+                playing = false;
+                break;
+            }
+            // Update the current location on the map
+            this.field[this.pY][this.pX] = pathCharacter;
+        }
+    }
+
+    askQuestion() {
+        const answer = prompt('Which way? (Enter U, D, L or R.)').toUpperCase();
+        switch (answer) {
+            case 'U':
+                this.pY -= 1;
+                break;
+            case 'D':
+                this.pY += 1;
+                break;
+            case 'L':
+                this.pX -= 1;
+                break;
+            case 'R':
+                this.pX += 1;
+                break;
+            default:
+                console.log('Enter U, D, L or R.');
+                this.askQuestion();
+                break;
+        }
+    }
+
+    isInBounds() {
+        return (
+            this.pY >= 0 &&
+            this.pX >= 0 &&
+            this.pY < this.field.length &&
+            this.pX < this.field[0].length
+        );
+    }
+
+    isHat() {
+        return this.field[this.pY][this.pX] === hat;
+    }
+
+    isHole() {
+        return this.field[this.pY][this.pX] === hole;
     }
 }
 
@@ -55,6 +118,7 @@ console.log('Avoid the holes, represented by the symbol O');
 console.log('Navigate the field with the arrow keys');
 console.log('Press q to quit');
 
+// Create a new instance of the Game class
 const myGame = new Game();
 //Obtaining user input for rows, columns, and percentage
 let validRows = false;
@@ -91,8 +155,23 @@ while (!validColumns) {
     }
 }
 
-const percentage = prompt('What percentage of the field should be holes?');
+let validPercentage = false;
+let percentage;
+while (!validPercentage) {
+    try {
+        percentage = prompt('What percentage of the field should be holes?');
+        if (!isNaN(percentage) && percentage > 0 && percentage <= 100) {
+            validPercentage = true;
+        }
+        else {
+            throw new Error('Please enter a number between 1 and 100');
+        }
+    } catch (e) {
+        console.log(e.message);
+    }
+}
 myGame.generateField(rows, columns, percentage);
+myGame.play();
 
-myGame.print();
-prompt('What direction would you like to move?');
+// myGame.print();
+// prompt('What direction would you like to move?');
