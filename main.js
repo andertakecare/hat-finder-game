@@ -42,10 +42,40 @@ console.log('Navigate the field with the arrow keys');
 console.log('Press q to quit');
 
 const myGame = new Game();
-console.log(myGame.field);
-const rows = prompt('How many rows would you like?');
-console.log(rows);
-const columns = prompt('How many columns would you like?');
+//Obtaining user input for rows, columns, and percentage
+let validRows = false;
+let rows;
+while (!validRows) {
+    try {
+        rows = prompt('How many rows would you like?');
+        if (!isNaN(rows) && rows > 0 && rows <= 100) {
+            validRows = true;
+        }
+        else {
+            throw new Error('Please enter a number between 1 and 100');
+        }
+    } catch (e) {
+        console.log(e.message);
+    }
+}
+
+
+let validColumns = false;
+let columns;
+while (!validColumns) {
+    try {
+        columns = prompt('How many columns would you like?\n');
+        if (!isNaN(columns) && columns > 0 && columns <= 100) {
+            validColumns = true;
+        }
+        else {
+            throw new Error('Please enter a number between 1 and 100');
+        }
+    } catch (e) {
+        console.log(e.message);
+    }
+}
+
 const percentage = prompt('What percentage of the field should be holes?');
 myGame.generateField(rows, columns, percentage);
 
