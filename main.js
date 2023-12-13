@@ -87,6 +87,9 @@ class Game {
             case 'R':
                 this.pX += 1;
                 break;
+            case 'Q':
+                this.terminate();
+                break;
             default:
                 console.log('Enter U, D, L or R.');
                 this.askQuestion();
@@ -110,12 +113,19 @@ class Game {
     isHole() {
         return this.field[this.pY][this.pX] === hole;
     }
+
+    terminate() {
+        console.log('Thanks for playing!');
+        process.exit();
+    }
 }
 
 console.log('Welcome to Find Your Hat!');
+console.log('You are represented by the symbol *');
 console.log('Your hat is represented by the symbol ^');
 console.log('Avoid the holes, represented by the symbol O');
-console.log('Navigate the field with the arrow keys');
+console.log('Avoid going out of bounds');
+console.log('Navigate the field with U, D, L or R.');
 console.log('Press q to quit');
 
 // Create a new instance of the Game class
@@ -127,6 +137,9 @@ while (!validRows) {
     try {
         rows = prompt('How many rows would you like?');
         console.log("\n");
+        if(rows === 'q') {
+            myGame.terminate();
+        }
         if (!isNaN(rows) && rows > 0 && rows <= 100) {
             validRows = true;
         }
@@ -144,6 +157,9 @@ let columns;
 while (!validColumns) {
     try {
         columns = prompt('How many columns would you like?');
+        if(columns === 'q') {
+            myGame.terminate();
+        }
         if (!isNaN(columns) && columns > 0 && columns <= 100) {
             validColumns = true;
         }
@@ -160,6 +176,9 @@ let percentage;
 while (!validPercentage) {
     try {
         percentage = prompt('What percentage of the field should be holes?');
+        if(percentage === 'q') {
+            myGame.terminate();
+        }
         if (!isNaN(percentage) && percentage > 0 && percentage <= 100) {
             validPercentage = true;
         }
